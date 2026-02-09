@@ -1,0 +1,56 @@
+<footer class="site-footer">
+    <div class="footer-container">
+        <div class="brand-section" style="flex: 1.5; min-width: 300px;">
+            <a href="/" class="stylish-font"
+                style="font-size: 3rem; color: #ff1f6a; text-decoration: none; display: block; margin-bottom: 20px;">RentEasyIndia</a>
+            <p style="color: #888; line-height: 1.6; margin-bottom: 25px;">
+                Your premium destination for renting luxury jewellery, elegant attire, and event essentials.
+                Experience premium quality without the premium price tag.
+            </p>
+            <div class="social-icons" style="display: flex; gap: 15px;">
+                <a href="#"
+                    style="width: 40px; height: 40px; background: #333; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.3s;"><i
+                        class="fa-brands fa-facebook-f"></i></a>
+                <a href="#"
+                    style="width: 40px; height: 40px; background: #333; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.3s;"><i
+                        class="fa-brands fa-instagram"></i></a>
+                <a href="#"
+                    style="width: 40px; height: 40px; background: #333; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.3s;"><i
+                        class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+
+        <!-- Column 2: Location -->
+        <div class="footer-col center-text">
+            <h3>Our Location</h3>
+            <p>Plot no 55 Niwara society balaji nagar dhankwadi<br>pune 411043</p>
+
+            <p class="contact-info">
+                <a href="mailto:gajrupdecorators@gmail.com"
+                    style="color: #ccc; text-decoration: none;">gajrupdecorators@gmail.com</a><br>
+                <a href="tel:+918888651137" style="color: #ccc; text-decoration: none;">+91 8888651137</a>
+            </p>
+
+            <div class="action-links">
+                <a href="#"><i class="fa-solid fa-location-dot"></i> Get Direction</a>
+                <a href="tel:+918888651137"><i class="fa-solid fa-phone"></i> Call Now</a>
+            </div>
+        </div>
+
+        <!-- Column 3: Services -->
+        <div class="footer-col right-text">
+            <h3>Services</h3>
+            <ul class="footer-links">
+                <li><a href="{{ url_for('products.home') }}">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="{{ url_for('products.categories') }}">Services</a></li>
+                <!-- Linked to categories for now -->
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>Copyright © 2025 RentEasyIndia</p>
+    </div>
+</footer>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="RentEasy India - Your one-stop destination for renting premium jewellery, elegant dresses, event decor, and professional tools. Affordable rentals for every occasion.">
+    <meta name="keywords"
+        content="rent jewelry, bridal wear rental, event decor rental, rent tools india, RentEasy India">
+    <meta name="author" content="RentEasy India">
+    <title>{% block title %}RentEasy India | Rent Jewellery, Dresses & Event Essentials{% endblock %}</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- FLATPICKR (For Availability Calendar) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+    <!-- WHATSAPP SUPPORT: Premium Floating Button -->
+    <a id="whatsappBtn"
+        href="https://wa.me/918788863751?text=Hi%20RentEasy!%20I'm%20interested%20in%20renting%20one%20of%20your%20premium%20items.%20Can%20you%20help%20me%20with%20the%20details?"
+        onclick="simulateAutoReply(event)" class="whatsapp-float" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span>Hey! Need help renting? 👗</span>
+    </a>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    {% block content %}
+    {% endblock %}
+
+    {% include 'footer.html' %}
+
+    {% block scripts %}
+    <script>
+        // --- PREMIUM POLISH: TOAST SYSTEM ---
+        function showToast(message, icon = 'fa-check-circle') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `
+                <i class="fa-solid ${icon}"></i>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => toast.classList.add('show'), 10);
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        // --- SIMULATED AUTO-REPLY EXAMPLE ---
+        function simulateAutoReply(e) {
+            e.preventDefault(); // Prevent instant jump so the user sees the 'Automation' example
+            const waUrl = e.currentTarget.href;
+
+            // Show a high-end simulation toast
+            showToast("Website AI: 'Thank you! We are initiating your rental inquiry and preparing our team...' 🤖", "fa-robot");
+
+            // Redirect after a short delay so the user can actually see the 'Auto-Reply' on the site
+            setTimeout(() => {
+                window.open(waUrl, '_blank');
+                // Second toast to explain how to get real 24/7 automation
+                setTimeout(() => {
+                    showToast("Pro Tip: Set up 'Away Messages' in WhatsApp Business for real 24/7 replies!", "fa-lightbulb");
+                }, 500);
+            }, 1200);
+        }
+
+        // --- AJAX HANDLERS ---
+        function toggleLike(element) {
+            const productId = element.dataset.id || element.getAttribute('onclick').match(/\d+/)[0];
+            fetch('/toggle-wishlist', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ product_id: productId })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        element.classList.toggle('active');
+                        if (element.classList.contains('active')) {
+                            element.style.color = '#ff1f6a';
+                            showToast("Added to Wishlist! ❤️", "fa-heart");
+                        } else {
+                            element.style.color = '#888';
+                            showToast("Removed from Wishlist", "fa-heart-crack");
+                        }
+                    } else if (data.status === 'error' && data.message === 'Login required') {
+                        window.location.href = "{{ url_for('auth.customer_login') }}";
+                    }
+                });
+        }
+
+        function addToCart(productId) {
+            const formData = new FormData();
+            formData.append('product_id', productId);
+
+            fetch("{{ url_for('user.add_to_cart_db') }}", {
+                method: 'POST',
+                body: formData
+            })
+                .then(res => {
+                    if (res.redirected) {
+                        window.location.href = res.url;
+                    } else {
+                        showToast("Added to Cart successfully! 🛒", "fa-cart-shopping");
+                    }
+                });
+        }
+
+        // --- SCROLL REVEAL OBSERVER ---
+        document.addEventListener("DOMContentLoaded", function () {
+            const observerOptions = { threshold: 0.1 };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+            // --- WHATSAPP GREETING TRIGGER ---
+            setTimeout(() => {
+                const waBtn = document.getElementById('whatsappBtn');
+                if (waBtn) waBtn.classList.add('show-greeting');
+                setTimeout(() => {
+                    if (waBtn) waBtn.classList.remove('show-greeting');
+                }, 5000); // Hide after 5 seconds
+            }, 3000); // Show after 3 seconds
+        });
+    </script>
+    {% endblock %}
+</body>
+
+</html>

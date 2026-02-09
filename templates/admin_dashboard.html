@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block head %}
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    .stats-container {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 30px;
+        justify-content: center;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        flex: 1;
+        max-width: 300px;
+    }
+
+    .stat-card h3 {
+        margin: 0;
+        font-size: 32px;
+        color: #ff1f6a;
+    }
+
+    .stat-card p {
+        color: #666;
+        margin: 5px 0 0;
+    }
+
+    .charts-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .chart-box {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+        .charts-container {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <h2>Admin Dashboard</h2>
+
+    <!-- STATS ROW -->
+    <div class="stats-container">
+        <div class="stat-card">
+            <h3>₹{{ total_revenue }}</h3>
+            <p>Total Revenue</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ active_bookings }}</h3>
+            <p>Active Bookings</p>
+        </div>
+    </div>
+
+    <!-- CHARTS ROW -->
+    <div class="charts-container">
+        <div class="chart-box">
+            <canvas id="categoryChart"></canvas>
+        </div>
+        <div class="chart-box">
+            <canvas id="revenueChart"></canvas>
+        </div>
+    </div>
+
+    <!-- ACTIONS ROW -->
+    <div class="admin-cards">
+
+        <a href="{{ url_for('admin.add_new_item') }}" style="text-decoration:none; color:inherit;">
+            <div class="admin-card">
+                <h3>Add New Item</h3>
+                <p>Add new products to the system.</p>
+            </div>
+        </a>
+
+        <a href="{{ url_for('admin.view_delete_items') }}" style="text-decoration:none; color:inherit;">
+            <div class="admin-card">
+                <h3>Delete Item</h3>
+                <p>Remove products from the system.</p>
+            </div>
+        </a>
+
+        <a href="{{ url_for('admin.view_all_bookings') }}" style="text-decoration:none; color:inherit;">
+            <div class="admin-card">
+                <h3>View Bookings</h3>
+                <p>See all customer bookings.</p>
+            </div>
+        </a>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Data passed from Flask
+    const categories = {{ categories | tojson }};
+    const bookingCounts = {{ booking_counts | tojson }};
+    const revenueCounts = {{ revenue_counts | tojson }};
+
+    // 1. DOUGHNUT CHART - Categories
+    const ctx1 = document.getElementById('categoryChart').getContext('2d');
+    new Chart(ctx1, {
+        type: 'doughnut',
+        data: {
+            labels: categories,
+            datasets: [{
+                label: 'Bookings',
+                data: bookingCounts,
+                backgroundColor: [
+                    '#ff7675', '#a29bfe', '#55efc4', '#ffeaa7', '#74b9ff', '#fd79a8'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Bookings by Category'
+                }
+            }
+        }
+    });
+
+    // 2. BAR CHART - Revenue
+    const ctx2 = document.getElementById('revenueChart').getContext('2d');
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: categories,
+            datasets: [{
+                label: 'Revenue (₹)',
+                data: revenueCounts,
+                backgroundColor: '#8b2c4a'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Revenue per Category'
+                },
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

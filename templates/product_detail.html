@@ -1,0 +1,350 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product[1] }} - RentEasyIndia{% endblock %}
+
+{% block content %}
+<div class="product-detail-container"
+    style="max-width: 1200px; margin: 40px auto; padding: 20px; display: flex; gap: 40px; flex-wrap: wrap;">
+
+    <!-- Left: Image -->
+    <div class="product-image" style="flex: 1; min-width: 300px;">
+        <img src="{{ product[4] }}" alt="{{ product[1] }}"
+            style="width: 100%; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+    </div>
+
+    <!-- Right: Details -->
+    <div class="product-info" style="flex: 1; min-width: 300px;">
+        <h1 style="font-size: 2.5rem; color: #333; margin-bottom: 10px;">{{ product[1] }}</h1>
+        <p class="category" style="color: #666; font-size: 1rem; margin-bottom: 20px;">Category: {{ product[2] }}</p>
+
+        <div class="price-container" style="margin-bottom: 25px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 5px;">
+                <span class="market-price" style="font-size: 1.1rem; margin-right: 0;">M.R.P: ₹{{ product[6]|int
+                    }}</span>
+                <span class="save-badge" style="font-size: 0.9rem; padding: 4px 10px;">Save 90%</span>
+            </div>
+            <div class="price"
+                style="font-size: 2.2rem; color: #ff1f6a; font-weight: 800; display: flex; align-items: baseline; gap: 8px;">
+                ₹{{ product[3] }} <span style="font-size: 1rem; color: #888; font-weight: normal;">/ day</span>
+            </div>
+        </div>
+
+        <!-- URGENCY BADGE -->
+        <div style="margin-bottom: 25px;">
+            {% if product[0] % 3 == 0 %}
+            <span class="badge badge-trending" style="position: static; display: inline-block;">🔥 Trending
+                Choice</span>
+            {% elif product[0] % 3 == 1 %}
+            <span class="badge badge-sale" style="position: static; display: inline-block;">✨ Special Offer</span>
+            {% else %}
+            <span class="badge badge-limited" style="position: static; display: inline-block;">⚡ Limited
+                Availability</span>
+            {% endif %}
+            <span style="font-size: 0.85rem; color: #e74c3c; margin-left: 10px; font-weight: 600;">Only 2 left in
+                stock!</span>
+        </div>
+
+        <p class="description" style="line-height: 1.6; color: #555; margin-bottom: 30px;">
+            {{ product[5] if product[5] else "Experience luxury without the cost. This item is perfect for weddings,
+            parties, and special events. Rent it now and shine!" }}
+        </p>
+
+        <!-- ACTIONS & CALENDAR -->
+        <div class="booking-card"
+            style="background: #fdfdfd; padding: 25px; border-radius: 15px; border: 1px solid #eee; box-shadow: 0 5px 15px rgba(0,0,0,0.02); margin-bottom: 30px;">
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; color: #333; margin-bottom: 10px;">Select Rental
+                    Dates:</label>
+                <div style="position: relative;">
+                    <i class="fa-regular fa-calendar-days"
+                        style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #888;"></i>
+                    <input type="text" id="datePicker" placeholder="Select your range..."
+                        style="width: 100%; padding: 12px 12px 12px 45px; border-radius: 8px; border: 1px solid #ddd; font-family: inherit; font-size: 1rem; cursor: pointer; background: white;">
+                </div>
+            </div>
+
+            <div id="priceBreakdown"
+                style="margin-bottom: 20px; display: none; padding: 15px; background: #fffcfd; border-radius: 10px; border: 1px dashed #ffb2cc;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span id="rentalDaysLabel">0 days</span>
+                    <span id="rentalSubtotal">₹0</span>
+                </div>
+                <div
+                    style="display: flex; justify-content: space-between; font-weight: 600; color: #ff1f6a; font-size: 1.1rem; border-top: 1px solid #eee; padding-top: 10px; margin-top: 10px;">
+                    <span>Total Rent</span>
+                    <span id="rentalTotal">₹0</span>
+                </div>
+            </div>
+
+            <div class="actions" style="display: flex; gap: 15px;">
+                <button onclick="addToCart('{{ product[0] }}')" class="btn-primary"
+                    style="flex: 1; padding: 15px; background: #8b2c4a; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem; font-weight: 600; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                </button>
+
+                <button id="rentNowBtn" onclick="handleRentNow()"
+                    style="flex: 1; padding: 15px; background: #ff1f6a; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 1.1rem; font-weight: 700; transition: 0.3s; box-shadow: 0 4px 15px rgba(255, 31, 106, 0.2);">
+                    Rent Now
+                </button>
+            </div>
+        </div>
+
+        <div class="benefits" style="display: flex; gap: 20px; border-top: 1px solid #eee; padding-top: 20px;">
+            <div style="text-align: center;">
+                <i class="fa-solid fa-truck-fast" style="font-size: 1.5rem; color: #555;"></i>
+                <p style="font-size: 0.8rem; margin-top: 5px;">Fast Delivery</p>
+            </div>
+            <div style="text-align: center;">
+                <i class="fa-solid fa-check-circle" style="font-size: 1.5rem; color: #555;"></i>
+                <p style="font-size: 0.8rem; margin-top: 5px;">Verified Quality</p>
+            </div>
+            <div style="text-align: center;">
+                <i class="fa-solid fa-rotate-left" style="font-size: 1.5rem; color: #555;"></i>
+                <p style="font-size: 0.8rem; margin-top: 5px;">Easy Returns</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="reviews-container" style="max-width: 1200px; margin: 0 auto 60px; padding: 20px;">
+    <!-- Ratings & Stats -->
+    <div style="display: flex; gap: 40px; margin-bottom: 40px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 250px; text-align: left;">
+            <h2 style="margin-bottom: 10px; font-size: 1.5rem;">Ratings & Reviews</h2>
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <div style="text-align: center;">
+                    <div style="font-size: 3.5rem; font-weight: bold; color: #333;">4.8 <span
+                            style="font-size: 1.5rem; color: #26a541;">★</span></div>
+                    <p style="color: #666; font-size: 0.9rem;">{{ reviews|length }} Verified Buyers</p>
+                </div>
+                <div style="height: 50px; width: 1px; background: #ddd;"></div>
+                <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+                        <span style="font-size: 0.8rem; width: 30px;">5 ★</span>
+                        <div style="flex: 1; height: 5px; background: #eee; border-radius: 5px;">
+                            <div style="width: 70%; height: 100%; background: #26a541; border-radius: 5px;"></div>
+                        </div>
+                        <span style="font-size: 0.8rem; color: #999;">70%</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+                        <span style="font-size: 0.8rem; width: 30px;">4 ★</span>
+                        <div style="flex: 1; height: 5px; background: #eee; border-radius: 5px;">
+                            <div style="width: 20%; height: 100%; background: #26a541; border-radius: 5px;"></div>
+                        </div>
+                        <span style="font-size: 0.8rem; color: #999;">20%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="flex: 1; min-width: 250px; padding-left: 20px; border-left: 1px solid #eee;">
+            <h3 style="font-size: 1rem; color: #666; margin-bottom: 15px;">What Customers Said</h3>
+            <div style="margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 5px;">
+                    <span>Fit</span>
+                    <span style="color: #26a541; font-weight: bold;">Just Right (85%)</span>
+                </div>
+                <div style="width: 100%; height: 6px; background: #eee; border-radius: 3px;">
+                    <div style="width: 85%; height: 100%; background: #e91e63; border-radius: 3px;"></div>
+                </div>
+            </div>
+            <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 5px;">
+                    <span>Quality</span>
+                    <span style="color: #26a541; font-weight: bold;">Excellent (92%)</span>
+                </div>
+                <div style="width: 100%; height: 6px; background: #eee; border-radius: 3px;">
+                    <div style="width: 92%; height: 100%; background: #e91e63; border-radius: 3px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reviews List -->
+    <div class="reviews-list" style="display: grid; gap: 20px; border-top: 1px solid #eee; padding-top: 30px;">
+        {% if reviews %}
+        {% for review in reviews %}
+        <div class="review-card"
+            style="background: white; padding: 0; display: flex; gap: 20px; align-items: flex-start; margin-bottom: 20px;">
+            <div class="user-avatar"
+                style="width: 40px; height: 40px; background: #eee; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #555; font-size: 1rem; min-width: 40px;">
+                {{ review[10][0] if review[10] else "U" }}
+            </div>
+            <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                    <div class="stars"
+                        style="background:#26a541; color:white; padding: 2px 6px; border-radius: 2px; font-weight: bold; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 3px;">
+                        {{ review[3] }} <i class="fa-solid fa-star" style="font-size: 0.6rem;"></i>
+                    </div>
+                </div>
+                <p style="color: #333; margin-bottom: 8px; font-size: 0.95rem; line-height: 1.5;">{{ review[4] }}</p>
+                <div
+                    style="color: #999; font-size: 0.8rem; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <span style="font-weight: 600; color: #777;">{{ review[10] if review[10] else "Customer" }}</span>
+                    <span>|</span>
+                    <span>{{ review[5].strftime('%d %b %Y') if review[5] else 'Recently' }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div style="text-align: center; padding: 40px; color: #777;">
+            <i class="fa-regular fa-comments" style="font-size: 3rem; margin-bottom: 20px; color: #ddd;"></i>
+            <p>No reviews yet. Be the first to add one!</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div style="max-width: 1200px; margin: 0 auto 60px; padding: 20px;">
+    <div style="margin-top: 60px; border-top: 1px solid #eee; padding-top: 50px;">
+        <h2
+            style="font-size: 2rem; color: #333; margin-bottom: 30px; text-align: center; font-family: 'Playball', cursive;">
+            Complete Your Look ✨</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+            {% if recommendations %}
+            {% for rec in recommendations %}
+            <div class="product-card glass-card reveal"
+                style="padding: 10px; border-radius: 15px; overflow: hidden; background: white; text-align: left; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative;">
+                <img src="{{ rec[5] }}" alt="{{ rec[1] }}"
+                    style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px;">
+                <div style="padding: 10px;">
+                    <h4 style="font-size: 0.95rem; margin-bottom: 5px; color: #333; min-height: 2.2rem;">{{ rec[1] }}
+                    </h4>
+                    <div style="color: #ff1f6a; font-weight: 700; font-size: 1.1rem;">₹{{ rec[3] }} <span
+                            style="font-size: 0.75rem; color: #888; font-weight: normal;">/ day</span></div>
+                    <a href="{{ url_for('products.product_detail', product_id=rec[0]) }}"
+                        style="text-decoration: none; display: block; background: #fdfdfd; border: 1px solid #ff1f6a; color: #ff1f6a; text-align: center; padding: 6px; border-radius: 6px; margin-top: 10px; font-size: 0.85rem; font-weight: 600; transition: 0.3s;">View
+                        Item</a>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p style="text-align: center; color: #888; grid-column: 1/-1;">Explore our other exclusive collections!</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div id="paymentModal" class="modal"
+    style="display:none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
+    <div class="modal-content"
+        style="background-color: #fefefe; margin: 10% auto; padding: 25px; border: 1px solid #888; width: 450px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+        <span onclick="closePaymentModal()"
+            style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+
+        <h2 style="text-align: center; color: #333; margin-bottom: 20px; font-family: 'Playball', cursive;">Finalize
+            Your Booking</h2>
+
+        <form action="{{ url_for('user.payment_page') }}" method="POST">
+            <input type="hidden" id="modal_product_id" name="product_id">
+            <input type="hidden" id="modal_image" name="image">
+            <input type="hidden" id="modal_product_name" name="product_name">
+            <input type="hidden" id="modal_price" name="price">
+
+            <div
+                style="text-align: center; margin-bottom: 20px; background: #fffcfd; padding: 15px; border-radius: 10px; border: 1px dashed #ffb2cc;">
+                <h3 id="display_name" style="color: #333; margin-bottom: 5px;"></h3>
+                <p style="color: #ff1f6a; font-size: 1.2rem; font-weight: bold; margin: 0;">₹<span
+                        id="display_price"></span> / day</p>
+            </div>
+
+            <div style="margin-bottom: 12px;">
+                <label style="display:block; font-size: 0.9rem; margin-bottom: 4px; font-weight: 600;">Customer
+                    Name:</label>
+                <input type="text" name="customer_name" placeholder="Enter your full name" required
+                    style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit;">
+            </div>
+
+            <div style="margin-bottom: 12px;">
+                <label style="display:block; font-size: 0.9rem; margin-bottom: 4px; font-weight: 600;">Delivery
+                    Address:</label>
+                <textarea name="address" placeholder="Full Address (House, Street, City)" required rows="2"
+                    style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit;"></textarea>
+            </div>
+
+            <div style="margin-bottom: 12px;">
+                <label style="display:block; font-size: 0.9rem; margin-bottom: 4px; font-weight: 600;">Location /
+                    Landmark:</label>
+                <input type="text" name="location" placeholder="e.g. Near Garden Area" required
+                    style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit;">
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display:block; font-size: 0.9rem; margin-bottom: 4px; font-weight: 600;">Rental Duration
+                    (Days):</label>
+                <input type="number" id="modal_days" name="days" value="1" min="1" readonly
+                    style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9; cursor: not-allowed;">
+            </div>
+
+            <button type="submit"
+                style="width: 100%; background-color: #ff1f6a; color: white; padding: 16px; border: none; border-radius: 10px; cursor: pointer; font-size: 18px; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 15px rgba(255, 31, 106, 0.3);">
+                Proceed to Payment
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    let selectedDays = 1;
+
+    document.addEventListener("DOMContentLoaded", function () {
+        flatpickr("#datePicker", {
+            mode: "range",
+            minDate: "today",
+            dateFormat: "Y-m-d",
+            onClose: function (selectedDates, dateStr, instance) {
+                if (selectedDates.length >= 1) {
+                    if (selectedDates.length === 2) {
+                        const start = selectedDates[0];
+                        const end = selectedDates[1];
+                        const diffTime = Math.abs(end - start);
+                        selectedDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                    } else {
+                        selectedDays = 1;
+                    }
+
+                    document.getElementById('priceBreakdown').style.display = 'block';
+                    document.getElementById('rentalDaysLabel').innerText = `${selectedDays} days`;
+
+                    const dailyPrice = {{ product[3] }};
+                    const total = dailyPrice * selectedDays;
+
+                document.getElementById('rentalSubtotal').innerText = `₹${total}`;
+                document.getElementById('rentalTotal').innerText = `₹${total}`;
+            }
+        }
+        });
+    });
+
+    function handleRentNow() {
+        const dateInput = document.getElementById('datePicker').value;
+        if (!dateInput) {
+            showToast("Please select a date first! 📅", "fa-calendar-circle-exclamation");
+            return;
+        }
+        openPaymentModal('{{ product[1] }}', '{{ product[3] }}', '{{ product[4] }}', '{{ product[0] }}', selectedDays);
+    }
+
+    function openPaymentModal(name, price, image, id, days = 1) {
+        document.getElementById('modal_product_name').value = name;
+        document.getElementById('modal_price').value = price;
+        document.getElementById('modal_image').value = image;
+        document.getElementById('modal_product_id').value = id;
+        document.getElementById('display_name').innerText = name;
+        document.getElementById('display_price').innerText = price;
+        document.getElementById('modal_days').value = days;
+        document.getElementById('paymentModal').style.display = "block";
+    }
+
+    function closePaymentModal() {
+        document.getElementById('paymentModal').style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target == document.getElementById('paymentModal')) {
+            closePaymentModal();
+        }
+    }
+</script>
+{% endblock %}

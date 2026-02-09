@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}Decor Collection | RentEasy India{% endblock %}
+
+{% block content %}
+<section class="product-section">
+    <div class="reveal" style="text-align: center; margin-bottom: 40px; padding-top: 40px;">
+        <h2 class="section-title" style="margin-bottom: 10px; font-family: 'Playball', cursive; font-size: 3rem;">Event
+            Decor Collection</h2>
+        <p style="color: #888;">Transform your space with our premium theme decorations.</p>
+    </div>
+
+    <!-- FILTER & SORT BAR -->
+    <div class="filter-bar"
+        style="max-width: 1200px; margin: 0 auto 30px; display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid #eee;">
+        <div style="color: #666; font-size: 0.95rem;">
+            Showing <span id="item-count">{{ products|length }}</span> items
+        </div>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <label style="font-size: 0.9rem; color: #555;">Sort By:</label>
+            <select class="sort-select" onchange="sortProducts(this.value)"
+                style="padding: 8px 15px; border-radius: 8px; border: 1px solid #ddd; outline: none; cursor: pointer;">
+                <option value="default">New Arrivals</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="product-grid" id="productGrid"
+        style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; padding-bottom: 60px;">
+        {% if products %}
+        {% for product in products %}
+        <div class="product-card glass-card reveal" data-price="{{ product[3] }}"
+            style="padding: 15px; border-radius: 20px; overflow: hidden; position: relative; transition: transform 0.3s ease; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+            <div style="position: relative; overflow: hidden; border-radius: 15px;">
+                <!-- PREMIUM BADGE -->
+                {% if product[0] % 3 == 0 %}
+                <div class="badge badge-limited">Expert Setup</div>
+                {% elif product[0] % 3 == 1 %}
+                <div class="badge badge-trending">Popular</div>
+                {% else %}
+                <div class="badge badge-sale">Deal</div>
+                {% endif %}
+
+                <img src="{{ product[4] }}" alt="{{ product[1] }}"
+                    style="width: 100%; height: 320px; object-fit: cover; transition: transform 0.5s ease;">
+                <div class="card-badges"
+                    style="position: absolute; top: 12px; right: 12px; display: flex; flex-direction: column; gap: 10px;">
+                    <button class="icon-btn" data-id="{{ product[0] }}"
+                        style="background: white; border: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1); color: #888; transition: 0.3s;"
+                        onclick="toggleLike(this)">
+                        <i class="fa-solid fa-heart"></i>
+                    </button>
+                    <button class="icon-btn"
+                        style="background: white; border: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1); color: #ff1f6a; transition: 0.3s;"
+                        onclick="addToCart('{{ product[0] }}')">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div style="padding: 20px 5px 10px; text-align: left;">
+                <h3 style="font-size: 1.2rem; margin-bottom: 8px; color: #333; font-weight: 600; min-height: 2.8rem;">{{
+                    product[1] }}</h3>
+
+                <!-- STAR RATING & SOCIAL PROOF -->
+                <div class="rating-container" style="justify-content: flex-start;">
+                    <div class="stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <span class="review-count">(50+ setups)</span>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <!-- MARKET VALUE COMPARISON -->
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="market-price">Setup Cost: ₹{{ product[6]|int }}</span>
+                        <span class="save-badge">Complete Package</span>
+                    </div>
+                    <div class="price"
+                        style="font-size: 1.3rem; display: flex; align-items: baseline; gap: 4px; color: #ff1f6a; font-weight: 700;">
+                        ₹{{ product[3] }} <span style="font-size: 0.85rem; color: #888; font-weight: normal;">/
+                            day</span>
+                    </div>
+                </div>
+                <a href="{{ url_for('products.product_detail', product_id=product[0]) }}"
+                    class="rent-btn rent-btn-premium"
+                    style="width: 100%; text-decoration:none; display: block; text-align: center; margin-top: 20px; border-radius: 12px; padding: 14px; font-weight: 600; background: #ff1f6a; color: white; border: none; transition: 0.3s;">
+                    Rent Now
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div style="grid-column: 1/-1; text-align: center; padding: 80px; color: #888;">
+            <i class="fa-solid fa-holly-berry" style="font-size: 4rem; margin-bottom: 20px; opacity: 0.3;"></i>
+            <p style="font-size: 1.2rem;">No products found in this collection yet.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<script>
+    function sortProducts(criteria) {
+        const grid = document.getElementById('productGrid');
+        const cards = Array.from(grid.getElementsByClassName('product-card'));
+
+        if (criteria === 'default') {
+            location.reload();
+            return;
+        }
+
+        cards.sort((a, b) => {
+            const priceA = parseFloat(a.dataset.price);
+            const priceB = parseFloat(b.dataset.price);
+
+            if (criteria === 'price-low') return priceA - priceB;
+            if (criteria === 'price-high') return priceB - priceA;
+            return 0;
+        });
+
+        grid.innerHTML = '';
+        cards.forEach(card => grid.appendChild(card));
+
+        // Re-trigger reveal for visible items
+        cards.forEach(card => card.classList.add('active'));
+
+        showToast("Sorted by Price ✨", "fa-sort");
+    }
+</script>
+
+{% include 'modal.html' %}
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Categories | RentEasy India{% endblock %}
+
+{% block content %}
+<!-- PAGE TITLE -->
+<section style="padding:40px; text-align:center;">
+    <h1>Select a Category</h1>
+    <p>Choose what you want to rent</p>
+</section>
+
+<!-- CATEGORY GRID -->
+<section style="padding:0 40px 40px 40px;">
+    <div class="category-grid">
+
+        <a href="{{ url_for('products.jewelry') }}" class="category-card">
+            <div class="category-image" style="background-image: url('/static/images/jwelery1.jpg');"></div>
+            <h3>Jewellery</h3>
+            <p>Bridal & Party Jewellery</p>
+        </a>
+
+        <a href="{{ url_for('products.dresses') }}" class="category-card">
+            <div class="category-image" style="background-image: url('/static/images/ethnic_wear.jpg');"></div>
+            <h3>Dresses</h3>
+            <p>Ethnic & Party Wear</p>
+        </a>
+
+        <a href="{{ url_for('products.decor') }}" class="category-card">
+            <div class="category-image" style="background-image: url('/static/images/decor1.jpg');"></div>
+            <h3>Décor Items</h3>
+            <p>Wedding & Event Décor</p>
+        </a>
+
+        <a href="{{ url_for('products.event_tools') }}" class="category-card">
+            <div class="category-image" style="background-image: url('/static/images/event_tool.jpg');"></div>
+            <h3>Event Tools</h3>
+            <p>Lights, Sound, Furniture</p>
+        </a>
+
+    </div>
+</section>
+{% endblock %}
+
+{% block head %}
+<style>
+    .category-image {
+        height: 180px;
+        background-size: cover;
+        background-position: center;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}

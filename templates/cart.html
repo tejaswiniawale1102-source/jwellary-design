@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}My Cart{% endblock %}
+
+{% block content %}
+<section style="padding: 60px 80px;">
+    <h2 style="text-align:center; margin-bottom:30px;">Your Cart 🛒</h2>
+
+    {% if cart and cart|length > 0 %}
+    <div class="cart-items" style="display: grid; gap: 20px;">
+        {% for item in cart %}
+        <div class="glass-card"
+            style="display: flex; align-items: center; justify-content: space-between; padding: 20px; border-radius: 15px;">
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <img src="{{ item.image }}" alt="{{ item.name }}" width="100" height="100"
+                    style="border-radius:10px; object-fit: cover;">
+                <div>
+                    <h3 style="margin: 0; font-size: 1.25rem;">{{ item.name }}</h3>
+                    <p style="color: #ff1f6a; font-weight: 600; font-size: 1.1rem; margin-top: 5px;">₹{{ item.price }} /
+                        day</p>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <form action="{{ url_for('user.payment_page') }}" method="POST">
+                    <input type="hidden" name="product_id" value="{{ item.product_id }}">
+                    <input type="hidden" name="product_name" value="{{ item.name }}">
+                    <input type="hidden" name="price" value="{{ item.price }}">
+                    <input type="hidden" name="image" value="{{ item.image }}">
+                    <input type="hidden" name="days" value="1">
+                    <button type="submit" class="rent-btn" style="padding: 10px 25px; border-radius: 8px;">
+                        Rent Now
+                    </button>
+                </form>
+
+                <form action="{{ url_for('user.remove_from_cart') }}" method="POST">
+                    <input type="hidden" name="cart_id" value="{{ item.cart_id }}">
+                    <button type="submit"
+                        style="background:none; border:none; color:#ff3b3b; cursor:pointer; font-size:20px; padding: 10px;">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div style="text-align:center; margin-top:50px;">
+        <a href="{{ url_for('products.jewelry') }}" class="list-btn"
+            style="text-decoration:none; display: inline-block; padding: 12px 30px;">
+            Continue Shopping
+        </a>
+    </div>
+
+    {% else %}
+    <div style="text-align:center; padding:40px;">
+        <h3>Your Cart is Empty</h3>
+        <a href="{{ url_for('products.jewelry') }}" class="rent-btn"
+            style="text-decoration:none; margin-top:20px; display:inline-block;">Browse Jewellery</a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

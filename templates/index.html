@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero-section"
+    style="position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; min-height: 80vh;">
+    <div class="hero-content"
+        style="padding: 120px 80px; background: linear-gradient(135deg, rgba(60, 20, 35, 0.85) 0%, rgba(209, 0, 126, 0.6) 100%), url('/static/images/hero_hd.png'); background-size: cover; background-position: center; color: white; width: 100%; text-align: center; border-radius: 0;">
+        <h1
+            style="font-size: 5rem; margin-bottom: 20px; font-family: 'Playball', cursive; text-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+            Luxury, Accessible.
+        </h1>
+        <p style="font-size: 1.6rem; margin-bottom: 50px; opacity: 0.95; font-weight: 300;">Rent premium jewellery and
+            event essentials for your most special moments.</p>
+
+        <div class="search-panel glass-card"
+            style="display: flex; gap: 15px; background: rgba(255,255,255,0.15); padding: 30px; border-radius: 20px; backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.3); max-width: 900px; margin: 0 auto; flex-wrap: wrap; justify-content: center;">
+            <select id="categorySelect"
+                style="min-width: 250px; flex: 1; padding: 18px; border-radius: 12px; border: none; font-size: 1.1rem; background: white;">
+                <option value="">What are you looking for?</option>
+                <option value="jwelery">Exquisite Jewellery</option>
+                <option value="mens">Men's Wedding Wear</option>
+                <option value="dresses">Women's Grand Dresses</option>
+                <option value="decor">Theme Decorations</option>
+                <option value="event_tools">Professional Event Tools</option>
+            </select>
+            <button onclick="showProducts()" class="rent-btn rent-btn-premium"
+                style="padding: 0 50px; border-radius: 12px; font-size: 1.2rem; font-weight: 600; background: #ff1f6a; color: white; border: none; cursor: pointer; min-height: 60px;">Explore
+                Now</button>
+        </div>
+    </div>
+</section>
+
+<!-- TRENDING COLLECTIONS SECTION -->
+<section style="padding: 80px 80px 40px; background: white;">
+    <div style="text-align: center; margin-bottom: 60px;">
+        <h2 style="font-size: 3.5rem; color: #333; font-family: 'Playball', cursive; margin-bottom: 15px;">Trending
+            Collections</h2>
+        <p style="color: #888; font-size: 1.1rem;">Explore our most loved categories this season.</p>
+        <div style="width: 80px; height: 4px; background: #ff1f6a; margin: 20px auto 0; border-radius: 2px;"></div>
+    </div>
+
+    <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;">
+        <!-- Jewellery -->
+        <a href="/jwelery" class="glass-card reveal"
+            style="position: relative; height: 400px; border-radius: 30px; overflow: hidden; text-decoration: none; display: block;">
+            <img src="/static/images/jwelery6.jpg"
+                style="width: 100%; height: 100%; object-fit: cover; transition: 0.5s;">
+            <div
+                style="position: absolute; inset: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); display: flex; flex-direction: column; justify-content: flex-end; padding: 40px; color: white;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 10px;">Exquisite Jewellery</h3>
+                <p style="opacity: 0.8; margin-bottom: 20px;">Timeless pieces for your forever moments.</p>
+                <div
+                    style="width: 40px; height: 40px; background: white; color: #ff1f6a; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+        </a>
+
+        <!-- Women's Wear -->
+        <a href="/dresses" class="glass-card reveal"
+            style="position: relative; height: 400px; border-radius: 30px; overflow: hidden; text-decoration: none; display: block; transition-delay: 0.1s;">
+            <img src="/static/images/womens11.jpg"
+                style="width: 100%; height: 100%; object-fit: cover; transition: 0.5s;">
+            <div
+                style="position: absolute; inset: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); display: flex; flex-direction: column; justify-content: flex-end; padding: 40px; color: white;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 10px;">Women's Wear</h3>
+                <p style="opacity: 0.8; margin-bottom: 20px;">Exquisite Gowns & Lehengas for grand moments.</p>
+                <div
+                    style="width: 40px; height: 40px; background: white; color: #ff1f6a; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+        </a>
+
+        <!-- Men's Wear -->
+        <a href="/mens" class="glass-card reveal"
+            style="position: relative; height: 400px; border-radius: 30px; overflow: hidden; text-decoration: none; display: block; transition-delay: 0.2s;">
+            <img src="/static/images/mens3.jpg" style="width: 100%; height: 100%; object-fit: cover; transition: 0.5s;">
+            <div
+                style="position: absolute; inset: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); display: flex; flex-direction: column; justify-content: flex-end; padding: 40px; color: white;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 10px;">Men's Wear</h3>
+                <p style="opacity: 0.8; margin-bottom: 20px;">Sophisticated Sherwanis & Suits.</p>
+                <div
+                    style="width: 40px; height: 40px; background: white; color: #ff1f6a; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+        </a>
+
+        <!-- Event Tools -->
+        <a href="/event_tools" class="glass-card reveal"
+            style="position: relative; height: 400px; border-radius: 30px; overflow: hidden; text-decoration: none; display: block; transition-delay: 0.3s;">
+            <img src="/static/images/event_tool3.jpg"
+                style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.9); transition: 0.5s;">
+            <div
+                style="position: absolute; inset: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); display: flex; flex-direction: column; justify-content: flex-end; padding: 40px; color: white;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 10px;">Event Tools</h3>
+                <p style="opacity: 0.8; margin-bottom: 20px;">Everything for a seamless professional event.</p>
+                <div
+                    style="width: 40px; height: 40px; background: white; color: #ff1f6a; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+        </a>
+
+        <!-- Theme Decor -->
+        <a href="/decor" class="glass-card reveal"
+            style="position: relative; height: 400px; border-radius: 30px; overflow: hidden; text-decoration: none; display: block; transition-delay: 0.4s;">
+            <img src="/static/images/decor12.jpg"
+                style="width: 100%; height: 100%; object-fit: cover; transition: 0.5s;">
+            <div
+                style="position: absolute; inset: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); display: flex; flex-direction: column; justify-content: flex-end; padding: 40px; color: white;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 10px;">Theme Decor</h3>
+                <p style="opacity: 0.8; margin-bottom: 20px;">Setting the perfect mood for your events.</p>
+                <div
+                    style="width: 40px; height: 40px; background: white; color: #ff1f6a; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+        </a>
+    </div>
+</section>
+
+<!-- HOW IT WORKS SECTION -->
+<section style="padding: 120px 80px; background: #fffafc;">
+    <div style="text-align: center; margin-bottom: 80px;">
+        <h2 style="font-size: 3.5rem; color: #333; font-family: 'Playball', cursive; margin-bottom: 15px;">How RentEasy
+            Works</h2>
+        <div style="width: 80px; height: 4px; background: #ff1f6a; margin: 0 auto; border-radius: 2px;"></div>
+    </div>
+
+    <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 50px; max-width: 1200px; margin: 0 auto;">
+        <div class="glass-card reveal"
+            style="padding: 50px 40px; text-align: center; border-radius: 30px; transition: 0.3s; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+            <div
+                style="width: 85px; height: 85px; background: #fff0f5; color: #ff1f6a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; margin: 0 auto 30px; box-shadow: 0 10px 20px rgba(255, 31, 106, 0.1);">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <h3 style="margin-bottom: 20px; font-size: 1.5rem;">1. Discover</h3>
+            <p style="color: #666; line-height: 1.7; font-size: 1.1rem;">Browse our curated collection of luxury
+                jewellery and event essentials.</p>
+        </div>
+
+        <div class="glass-card reveal"
+            style="padding: 50px 40px; text-align: center; border-radius: 30px; transition: 0.3s; background: white; transition-delay: 0.1s; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+            <div
+                style="width: 85px; height: 85px; background: #fff0f5; color: #ff1f6a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; margin: 0 auto 30px; box-shadow: 0 10px 20px rgba(255, 31, 106, 0.1);">
+                <i class="fa-solid fa-calendar-check"></i>
+            </div>
+            <h3 style="margin-bottom: 20px; font-size: 1.5rem;">2. Book</h3>
+            <p style="color: #666; line-height: 1.7; font-size: 1.1rem;">Pick your dates, provide details, and book with
+                a secure payment.</p>
+        </div>
+
+        <div class="glass-card reveal"
+            style="padding: 50px 40px; text-align: center; border-radius: 30px; transition: 0.3s; background: white; transition-delay: 0.2s; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+            <div
+                style="width: 85px; height: 85px; background: #fff0f5; color: #ff1f6a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; margin: 0 auto 30px; box-shadow: 0 10px 20px rgba(255, 31, 106, 0.1);">
+                <i class="fa-solid fa-gem"></i>
+            </div>
+            <h3 style="margin-bottom: 20px; font-size: 1.5rem;">3. Shine</h3>
+            <p style="color: #666; line-height: 1.7; font-size: 1.1rem;">Enjoy your premium items! We deliver and pick
+                up at your convenience.</p>
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section style="padding: 120px 80px; background: white;">
+    <div style="display: flex; align-items: center; gap: 60px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto;">
+        <div class="reveal" style="flex: 1; min-width: 350px;">
+            <h2 style="font-size: 3.5rem; margin-bottom: 30px; font-family: 'Playball', cursive; color: #ff1f6a;">
+                Trusted by Thousands</h2>
+            <p
+                style="font-size: 1.35rem; color: #444; line-height: 1.8; font-style: italic; margin-bottom: 35px; border-left: 5px solid #ff1f6a; padding-left: 25px;">
+                "RentEasy India made my wedding preparations so much easier. The jewellery was stunning and the process
+                was absolutely seamless. I couldn't be happier!"
+            </p>
+            <div style="display: flex; gap: 8px; color: #ffbc00; margin-bottom: 15px; font-size: 1.4rem;">
+                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                    class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p style="font-weight: 700; font-size: 1.2rem; color: #333;">- Priya S., Mumbai</p>
+        </div>
+        <div class="reveal"
+            style="flex: 1.2; display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; min-width: 350px;">
+            <div style="position: relative;">
+                <img src="/static/images/hero_hd.png"
+                    style="width: 100%; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+                <div
+                    style="position: absolute; bottom: -20px; right: -20px; background: #ff1f6a; color: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(255, 31, 106, 0.4);">
+                    <h4 style="font-size: 2.2rem; margin: 0;">5.0</h4>
+                    <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">Best Rated Service</p>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 30px; padding-top: 60px;">
+                <div class="glass-card" style="padding: 25px; border-radius: 20px; background: #8b2c4a; color: white;">
+                    <h4 style="font-size: 1.8rem; margin-bottom: 8px;">5000+</h4>
+                    <p style="font-size: 0.95rem; opacity: 0.9;">Happy Arrivals</p>
+                </div>
+                <div class="glass-card"
+                    style="padding: 25px; border-radius: 20px; border: 1px solid #eee; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <h4 style="font-size: 1.8rem; color: #ff1f6a; margin-bottom: 8px;">100%</h4>
+                    <p style="font-size: 0.95rem; color: #888;">Guaranteed Quality</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function showProducts() {
+        var category = document.getElementById("categorySelect").value;
+        if (category) {
+            window.location.href = "/" + category;
+        } else {
+            showToast("Please select a category first! ✨", "fa-circle-exclamation");
+        }
+    }
+</script>
+{% endblock %}

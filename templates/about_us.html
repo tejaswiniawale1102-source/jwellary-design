@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us | RentEasy India{% endblock %}
+
+{% block content %}
+<!-- ABOUT HERO -->
+<div class="about-hero"
+    style="text-align:center; padding:150px 20px; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/static/images/hero_hd.png'); background-size: cover; background-position: center; color: white;">
+    <h1
+        style="font-size: 4rem; margin-bottom: 20px; text-shadow: 0 4px 20px rgba(0,0,0,0.6); font-family: 'Playball', cursive; color: #ffffff;">
+        Crafting Your Dream Event</h1>
+    <p style="font-size: 1.5rem; opacity: 1; font-weight: 400; text-shadow: 0 2px 10px rgba(0,0,0,0.4);">
+        RentEasy India - Where luxury meets accessibility.</p>
+</div>
+
+<!-- SECTION 1: TRYING -->
+<section class="about-section" style="padding: 60px 20px;">
+    <div class="about-container" style="max-width: 1100px; margin: 0 auto;">
+        <div class="about-card" style="display: flex; gap: 40px; align-items: center; flex-wrap: wrap;">
+            <div class="about-img-wrapper" style="flex: 1; min-width: 300px;">
+                <img src="/static/images/trying.jpg" alt="Trying Dresses" class="about-img"
+                    style="width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            </div>
+            <div class="about-text" style="flex: 1; min-width: 300px;">
+                <h2 style="color: #ff1f6a; margin-bottom: 20px;">Find Your Perfect Fit</h2>
+                <p style="line-height: 1.8; color: #555;">
+                    At RentEasy, we believe that every outfit tells a story.
+                    Whether it's for a wedding, a gala, or a casual party,
+                    trying on your dream attire is the first step to making memories.
+                    Our collection allows you to explore, experiment, and find
+                    exactly what makes you shine.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 2: SHOOT (Reversed) -->
+<section class="about-section bg-soft" style="padding: 60px 20px; background: #f9f9f9;">
+    <div class="about-container" style="max-width: 1100px; margin: 0 auto;">
+        <div class="about-card reverse"
+            style="display: flex; gap: 40px; align-items: center; flex-wrap: wrap; flex-direction: row-reverse;">
+            <div class="about-img-wrapper" style="flex: 1; min-width: 300px;">
+                <img src="/static/images/shoot.jpg" alt="Photoshoot" class="about-img"
+                    style="width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            </div>
+            <div class="about-text" style="flex: 1; min-width: 300px;">
+                <h2 style="color: #ff1f6a; margin-bottom: 20px;">Capture Every Moment</h2>
+                <p style="line-height: 1.8; color: #555;">
+                    Style isn't just about wearing clothes; it's about
+                    capturing the essence of the moment. We provide
+                    premium fashion that looks stunning both in person
+                    and through the lens. Make every photoshoot
+                    magazine-worthy with our curated rentals.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 3: WEDDING -->
+<section class="about-section" style="padding: 60px 20px;">
+    <div class="about-container" style="max-width: 1100px; margin: 0 auto;">
+        <div class="about-card" style="display: flex; gap: 40px; align-items: center; flex-wrap: wrap;">
+            <div class="about-img-wrapper" style="flex: 1; min-width: 300px;">
+                <img src="/static/images/wedding.jpg" alt="Wedding Day" class="about-img"
+                    style="width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            </div>
+            <div class="about-text" style="flex: 1; min-width: 300px;">
+                <h2 style="color: #ff1f6a; margin-bottom: 20px;">Your Big Day, Perfected</h2>
+                <p style="line-height: 1.8; color: #555;">
+                    Weddings are once-in-a-lifetime events, and we are
+                    honored to be a part of yours. From bridal jewelry
+                    to elegant decor, we ensure that your special day
+                    is as stress-free and beautiful as you envisioned.
+                    Let us handle the details while you enjoy the magic.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

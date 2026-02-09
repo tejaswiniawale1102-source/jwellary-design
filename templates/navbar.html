@@ -1,0 +1,294 @@
+<!-- ================= TOP BLACK HEADER ================= -->
+<div class="top-header">
+    <div class="top-left">
+        <span>📍 Pune</span>
+        <a href="javascript:void(0);" onclick="toggleSupport()">
+            📞 Support (10AM - 7PM)
+        </a>
+        <span>📦 Track Order</span>
+    </div>
+
+    <div class="top-right">
+
+
+        {% if session.get('customer_name') %}
+        <a href="{{ url_for('user.profile') }}" class="user-name-btn">
+            <i class="fa-solid fa-user"></i> {{ session.get('customer_name') }}
+        </a>
+        <a href="{{ url_for('auth.logout') }}" style="margin-left: 10px; font-size: 13px;">Logout</a>
+        {% else %}
+        <a href="{{ url_for('auth.customer_login') }}">
+            <i class="fa-solid fa-right-to-bracket"></i> Sign In
+        </a>
+        {% endif %}
+    </div>
+</div>
+</div>
+
+<!-- FLASH MESSAGES POPUP -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div id="flashPopup" class="flash-popup">
+    <div class="flash-content">
+        <i class="fa-solid fa-circle-check flash-icon"></i>
+        <p>{{ messages[0] }}</p>
+        <span class="close-flash" onclick="closeFlash()">&times;</span>
+    </div>
+</div>
+<script>
+    setTimeout(function () {
+        var popup = document.getElementById("flashPopup");
+        if (popup) popup.style.display = "none";
+    }, 4000); // Auto hide after 4 seconds
+
+    function closeFlash() {
+        document.getElementById("flashPopup").style.display = "none";
+    }
+</script>
+{% endif %}
+{% endwith %}
+
+
+<!-- ================= SUPPORT DROPDOWN BAR ================= -->
+<div id="supportBar" class="support-bar">
+    <div class="support-container">
+
+        <div class="support-box">
+            <div class="support-icon-circle">
+                <i class="fa-solid fa-phone"></i>
+            </div>
+            <div>
+                <h3>CONTACT US</h3>
+                <p class="support-highlight">
+                    <a href="tel:+91232234456" style="text-decoration:none; color:inherit;">+91-232-234-456</a>
+                </p>
+                <p>WhatsApp Enabled
+                    <i class="fa-brands fa-whatsapp whatsapp"></i>
+                </p>
+            </div>
+        </div>
+
+        <div class="support-box">
+            <div class="support-icon-circle">
+                <i class="fa-solid fa-envelope"></i>
+            </div>
+            <div>
+                <h3>EMAIL US</h3>
+                <p class="support-highlight">
+                    support@renteasyindia.com
+                </p>
+            </div>
+        </div>
+
+        <div class="support-box">
+            <div class="support-icon-circle">
+                <i class="fa-solid fa-comments"></i>
+            </div>
+            <div>
+                <h3>STYLING SUPPORT</h3>
+                <p>
+                    Our styling experts are available from 10AM – 7PM IST.
+                    Click on the online chat icon for fashion, rental,
+                    and event-related assistance.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ================= PINK MAIN NAVBAR ================= -->
+<header class="top-bar">
+    <div class="logo">
+        <a href="{{ url_for('products.home') }}" class="stylish-font"
+            style="font-size: 28px; color: white;">RentEasyIndia</a>
+    </div>
+
+    <nav class="menu">
+        <a href="{{ url_for('products.home') }}">Home</a>
+        <div class="dropdown">
+            <button onclick="toggleCategories()" class="dropbtn">Categories <i
+                    class="fa-solid fa-chevron-down"></i></button>
+            <div id="categoryDropdown" class="dropdown-content">
+                <a href="{{ url_for('products.jewelry') }}">Jewellery</a>
+                <a href="{{ url_for('products.womens') }}">Women's Wear</a>
+                <a href="{{ url_for('products.mens') }}">Men's Wear</a>
+                <a href="{{ url_for('products.decor') }}">Decor</a>
+                <a href="{{ url_for('products.event_tools') }}">Event Tools</a>
+            </div>
+        </div>
+        <a href="{{ url_for('products.how_it_works') }}">Services</a>
+        <a href="{{ url_for('products.about_us') }}">About Us</a>
+    </nav>
+
+    <div class="right-info">
+
+        <div class="nav-icons" style="display: flex; align-items: center; gap: 15px; position: relative;">
+            <div class="search-container" style="position: relative;">
+                <form action="/search" method="GET" id="searchForm" style="display:inline;">
+                    <input type="text" name="q" id="navbarSearchInput" class="search-input"
+                        placeholder="Search products..."
+                        style="display: none; padding: 5px; border-radius: 5px; border: 1px solid #ccc;"
+                        onkeyup="liveSearch()">
+                </form>
+                <div id="navbarSearchResults" class="glass-card"
+                    style="display:none; position:absolute; top:45px; right:0; width:320px; border-radius:15px; box-shadow:0 15px 40px rgba(0,0,0,0.2); max-height:450px; overflow-y:auto; z-index:2000; border: 1px solid rgba(255,255,255,0.2);">
+                </div>
+            </div>
+
+            <a href="javascript:void(0);" onclick="handleSearch()"><i class="fa-solid fa-magnifying-glass"></i></a>
+            <a href="#"><i class="fa-solid fa-heart"></i></a>
+            <a href="{{ url_for('user.cart') }}">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </a>
+        </div>
+
+        <script>
+            function toggleCategories() {
+                document.getElementById("categoryDropdown").classList.toggle("show");
+                // Toggle arrow rotation
+                var icon = document.querySelector(".dropbtn i");
+                if (icon) icon.classList.toggle("rotate-180");
+            }
+
+            function toggleBookings() {
+                document.getElementById("bookingDropdown").classList.toggle("show");
+            }
+
+            function handleSearch() {
+                var searchInput = document.getElementById("navbarSearchInput");
+                var searchForm = document.getElementById("searchForm");
+                var resultsDiv = document.getElementById("navbarSearchResults");
+
+                if (searchInput.style.display === "none") {
+                    searchInput.style.display = "block";
+                    searchInput.focus();
+                } else {
+                    if (searchInput.value.trim() !== "") {
+                        searchForm.submit();
+                    } else {
+                        searchInput.style.display = "none";
+                        resultsDiv.style.display = "none";
+                    }
+                }
+            }
+
+            let searchTimeout = null;
+            function liveSearch() {
+                clearTimeout(searchTimeout);
+                var query = document.getElementById("navbarSearchInput").value;
+                var resultsDiv = document.getElementById("navbarSearchResults");
+
+                if (query.length < 2) {
+                    resultsDiv.style.display = "none";
+                    return;
+                }
+
+                searchTimeout = setTimeout(function () {
+                    fetch('/api/search?q=' + query)
+                        .then(response => response.json())
+                        .then(data => {
+                            resultsDiv.innerHTML = "";
+                            if (data.length > 0) {
+                                resultsDiv.style.display = "block";
+                                data.forEach(item => {
+                                    var div = document.createElement("div");
+                                    div.style.padding = "12px";
+                                    div.style.borderBottom = "1px solid #f0f0f0";
+                                    div.style.cursor = "pointer";
+                                    div.style.display = "flex";
+                                    div.style.alignItems = "center";
+                                    div.style.gap = "12px";
+                                    div.style.transition = "background 0.2s";
+
+                                    div.onmouseover = () => div.style.background = "#fff5f8";
+                                    div.onmouseout = () => div.style.background = "transparent";
+
+                                    div.innerHTML = `
+                                        <div style="width: 50px; height: 50px; overflow: hidden; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);">
+                                            <img src="${item.image}" width="50" height="50" style="object-fit: cover;">
+                                        </div>
+                                        <div style="flex:1;">
+                                            <div style="font-weight:600; font-size:14px; color:#fff;">${item.name}</div>
+                                            <div style="font-size:12px; color:rgba(255,255,255,0.7); display:flex; justify-content:space-between; align-items:center;">
+                                                <span>₹${item.price} / day</span>
+                                                <span style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-size: 10px;">${item.category}</span>
+                                            </div>
+                                        </div>
+                                    `;
+
+                                    div.onclick = function () {
+                                        window.location.href = "/product/" + item.id;
+                                    };
+
+                                    resultsDiv.appendChild(div);
+                                });
+                            } else {
+                                resultsDiv.innerHTML = "<div style='padding:15px; color:#888; font-size:13px; text-align:center;'>No products found</div>";
+                                resultsDiv.style.display = "block";
+                            }
+                        });
+                }, 300);
+            }
+
+            // Hide search results when clicking outside
+            document.addEventListener('click', function (event) {
+                var container = document.querySelector('.search-container');
+                var results = document.getElementById("navbarSearchResults");
+                if (container && !container.contains(event.target)) {
+                    results.style.display = "none";
+                }
+            });
+
+            // Close the dropdown if the user clicks outside of it
+            window.onclick = function (event) {
+                if (!event.target.matches('.dropbtn') && !event.target.matches('.dropbtn *') &&
+                    !event.target.matches('.plan-btn') && !event.target.matches('.plan-btn *')) {
+
+                    var dropdowns = document.getElementsByClassName("dropdown-content");
+                    var icon = document.querySelector(".dropbtn i");
+
+                    for (var i = 0; i < dropdowns.length; i++) {
+                        var openDropdown = dropdowns[i];
+                        if (openDropdown.classList.contains('show')) {
+                            openDropdown.classList.remove('show');
+                            // Reset arrow rotation when closing from outside click
+                            if (icon && icon.classList.contains("rotate-180")) {
+                                icon.classList.remove("rotate-180");
+                            }
+                        }
+                    }
+                }
+            }
+        </script>
+
+        <a href="{{ url_for('auth.admin_login') }}" class="admin-btn">
+            Admin
+        </a>
+
+        {% if session.get('customer_name') %}
+        <a href="{{ url_for('user.my_bookings') }}" class="admin-btn">
+            Bookings
+        </a>
+        {% endif %}
+    </div>
+
+
+</header>
+
+
+<!-- ================= SUPPORT TOGGLE SCRIPT ================= -->
+<script>
+    function toggleSupport() {
+        var bar = document.getElementById("supportBar");
+
+        if (bar.style.maxHeight && bar.style.maxHeight !== "0px") {
+            bar.style.maxHeight = "0px";
+            bar.style.padding = "0 60px";
+        } else {
+            bar.style.maxHeight = "300px";
+            bar.style.padding = "40px 60px";
+        }
+    }
+</script>

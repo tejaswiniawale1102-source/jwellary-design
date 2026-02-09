@@ -1,0 +1,83 @@
+<!-- Single Product Modal -->
+<div id="productModal" class="modal">
+    <div class="product-modal">
+        <span class="close-btn" onclick="closePopup()">&times;</span>
+
+        <div class="main-image">
+            <img id="modalImage" src="" alt="Product Image">
+        </div>
+
+        <div class="product-details">
+            <h2 id="modalTitle">Product Name</h2>
+            <p id="modalPrice" class="total">₹0 / day</p>
+
+            <form action="/payment" method="POST">
+                <input type="hidden" name="product_id" id="inputId">
+                <input type="hidden" name="product_name" id="inputName">
+                <input type="hidden" name="price" id="inputPrice">
+                <input type="hidden" name="image" id="inputImage">
+
+                <label>Rental Duration (Days)</label>
+                <input type="number" name="days" id="days" value="1" min="1" onchange="updateTotal()">
+
+                <label>Total Price (₹)</label>
+                <input type="text" name="total_rent" id="totalPrice" readonly>
+
+                <div class="modal-actions">
+                    <button type="button" onclick="addToCartModal()" style="background: #ff1f6a;">
+                        <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+                    </button>
+                    <button type="submit" style="background: #ff1f6a; color: white;">
+                        <i class="fa-solid fa-bolt"></i> Rent Now
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Modal Functions
+    function openPopup(id, name, price, image) {
+        document.getElementById("productModal").style.display = "flex";
+        document.getElementById("modalTitle").innerText = name;
+        document.getElementById("modalPrice").innerText = "₹" + price + " / day";
+        document.getElementById("modalImage").src = image;
+
+        document.getElementById("inputId").value = id;
+        document.getElementById("inputName").value = name;
+        document.getElementById("inputPrice").value = price;
+        document.getElementById("inputImage").value = image;
+
+        document.getElementById("days").value = 1;
+        updateTotal();
+    }
+
+    function closePopup() {
+        document.getElementById("productModal").style.display = "none";
+    }
+
+    function updateTotal() {
+        let price = document.getElementById("inputPrice").value;
+        let days = document.getElementById("days").value;
+        document.getElementById("totalPrice").value = "₹" + (price * days);
+    }
+
+    window.onclick = function (event) {
+        let modal = document.getElementById("productModal");
+        if (event.target == modal) {
+            closePopup();
+        }
+    }
+
+    // Add to Cart Logic
+    function addToCartModal() {
+        let productId = document.getElementById("inputId").value;
+        if (typeof addToCart === 'function') {
+            addToCart(productId);
+            closePopup();
+        } else {
+            console.error("Global addToCart function not found!");
+        }
+    }
+</script>

@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block title %}How It Works | RentEasy India{% endblock %}
+
+{% block head %}
+<style>
+    .hiw-container {
+        max-width: 1000px;
+        margin: 60px auto;
+        text-align: center;
+    }
+
+    .hiw-title {
+        font-size: 36px;
+        color: #ff1f6a;
+        margin-bottom: 50px;
+    }
+
+    .steps-container {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 40px;
+    }
+
+    .step-card {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        width: 250px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        position: relative;
+        transition: transform 0.3s;
+        overflow: hidden;
+    }
+
+    .step-card:hover {
+        transform: translateY(-10px);
+    }
+
+    .image-placeholder {
+        width: 100%;
+        height: 180px;
+        background: #ffe6ef;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        font-size: 40px;
+        color: #ff1f6a;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .slideshow-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        animation: crossfade 12s infinite;
+    }
+
+    .slideshow-img:nth-child(1) {
+        animation-delay: 0s;
+    }
+
+    .slideshow-img:nth-child(2) {
+        animation-delay: 3s;
+    }
+
+    .slideshow-img:nth-child(3) {
+        animation-delay: 6s;
+    }
+
+    .slideshow-img:nth-child(4) {
+        animation-delay: 9s;
+    }
+
+    @keyframes crossfade {
+
+        0%,
+        30%,
+        100% {
+            opacity: 0;
+            transform: scale(1);
+        }
+
+        5%,
+        25% {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+    }
+
+    .step-card h3 {
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    .step-card p {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hiw-container">
+    <h1 class="hiw-title">How Renting Works</h1>
+
+    <div class="steps-container">
+        <div class="step-card">
+            <div class="image-placeholder">
+                <img src="{{ url_for('static', filename='images/women_choosing_dress.jpg') }}" class="slideshow-img"
+                    alt="Choosing Dress">
+                <img src="{{ url_for('static', filename='images/fashion_boutique.jpg') }}" class="slideshow-img"
+                    alt="Fashion Boutique">
+                <img src="{{ url_for('static', filename='images/bridal_flat_lay.jpg') }}" class="slideshow-img"
+                    alt="Bridal Flat Lay">
+                <img src="{{ url_for('static', filename='images/ethnic_wear.jpg') }}" class="slideshow-img"
+                    alt="Ethnic Wear">
+            </div>
+            <h3>1. Select Your Style</h3>
+            <p>Browse through our exclusive collection of designer outfits, jewelry, and event decor. Pick what suits
+                your vibe.</p>
+        </div>
+
+        <div class="step-card">
+            <div class="image-placeholder">
+                <img src="{{ url_for('static', filename='images/delivery_box.jpg') }}" class="slideshow-img"
+                    alt="Delivery Box">
+                <img src="{{ url_for('static', filename='images/receiving_package.jpg') }}" class="slideshow-img"
+                    alt="Receiving Package">
+                <img src="{{ url_for('static', filename='images/calendor_method.jpg') }}" class="slideshow-img"
+                    alt="Calendar Method">
+                <img src="{{ url_for('static', filename='images/online_shopping.jpg') }}" class="slideshow-img"
+                    alt="Online Shopping">
+            </div>
+            <h3>2. Book & Rent</h3>
+            <p>Seamlessly plan your event with our easy booking system. Select your preferred dates and get your premium
+                rental package delivered safely.</p>
+        </div>
+
+        <div class="step-card">
+            <div class="image-placeholder">
+                <img src="{{ url_for('static', filename='images/pickup_parcel.jpg') }}" class="slideshow-img"
+                    alt="Pickup Parcel">
+                <img src="{{ url_for('static', filename='images/return_package.jpg') }}" class="slideshow-img"
+                    alt="Return Package">
+                <img src="{{ url_for('static', filename='images/happy_women.jpg') }}" class="slideshow-img"
+                    alt="Happy Customer">
+                <img src="{{ url_for('static', filename='images/delivery_van.jpg') }}" class="slideshow-img"
+                    alt="Delivery Van">
+            </div>
+            <h3>3. Returns Made Easy</h3>
+            <p>Enjoy your special moments without worry! Once you're done, simply pack the items back. Our delivery
+                partner will handle the pickup.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
