@@ -225,46 +225,96 @@ def rent_now():
     connection = get_connection()
     cursor = connection.cursor()
 
-    # 1. CHECK AVAILABILITY (Prevent Double Booking) 🛡️
-    # Logic: Overlap if (NewStart <= ExistingEnd) AND (NewEnd >= ExistingStart)
-    cursor.execute("""
-        SELECT b.booking_id FROM bookings b
-        JOIN booking_details bd ON b.booking_id = bd.booking_id
-        WHERE bd.product_id = :1 
-        AND b.status = 'Confirmed' 
-        AND (TO_DATE(:2, 'YYYY-MM-DD') <= b.return_date) 
-        AND (TO_DATE(:3, 'YYYY-MM-DD') >= b.rent_date)
-    """, (product_id, today_str, end_date_str))
-    
-    conflict = cursor.fetchone()
-    if conflict:
-        flash(f"⚠️ Sorry! {product_name} is already booked for these dates. Please try another item.")
+    try:
+        print(f"[RENT_NOW] Starting booking for customer {session['customer_id']}, product {product_id}")
+        
+        # 1. CHECK AVAILABILITY🛡️
+        cursor.execute("""
+            SELECT b.booking_id FROM bookings b
+            JOIN booking_details bd ON b.booking_id = bd.booking_id
+            WHERE bd.product_id = :1 
+            AND b.status = 'Confirmed' 
+            AND (TO_DATE(:2, 'YYYY-MM-DD') <= b.return_date) 
+            AND (TO_DATE(:3, 'YYYY-MM-DD') >= b.rent_date)
+        """, (product_id, today_str, end_date_str))
+        
+        conflict = cursor.fetchone()
+        if conflict:
+            print(f"[RENT_NOW] Conflict detected for product {product_id}")
+            flash(f"⚠️ Sorry! {product_name} is already booked for these dates.")
+            return redirect(url_for('products.home'))
+
+        print(f"[RENT_NOW] No conflicts, proceeding with booking")
+        print(f"[RENT_NOW] Data: customer_id={session['customer_id']}, total_rent={total_rent}, dates={today_str} to {end_date_str}")
+        
+        # 2. GET NEXT BOOKING ID
+        print(f"[RENT_NOW] Getting next booking_id...")
+        cursor.execute("SELECT NVL(MAX(booking_id), 0) + 1 FROM bookings")
+        new_booking_id = cursor.fetchone()[0]
+        print(f"[RENT_NOW] Next booking_id: {new_booking_id}")
+        
+        # 3. PROCEED TO BOOK 🚀
+        print(f"[RENT_NOW] Executing INSERT into bookings...")
+        cursor.execute("""
+            INSERT INTO bookings (booking_id, customer_id, total_price, booking_date, rent_date, return_date, status, phone, address, location)
+            VALUES (:1, :2, :3, SYSDATE, TO_DATE(:4, 'YYYY-MM-DD'), TO_DATE(:5, 'YYYY-MM-DD'), 'Confirmed', :6, :7, :8)
+        """, [new_booking_id, session['customer_id'], total_rent, today_str, end_date_str, phone, address, location])
+        
+        print(f"[RENT_NOW] INSERT successful!")
+
+        # Insert into booking_details
+        print(f"[RENT_NOW] Inserting into booking_details...")
+        cursor.execute("""
+            INSERT INTO booking_details (booking_id, product_id, quantity, price)
+            VALUES (:1, :2, 1, :3)
+        """, (new_booking_id, product_id, total_rent))
+        
+        print(f"[RENT_NOW] Committing transaction...")
+        connection.commit()
+        print(f"[RENT_NOW] Booking complete! ID: {new_booking_id}")
+        
+        flash(f"Rent Confirmed! {product_name} booked successfully. 🎉")
+        return redirect(url_for('user.booking_success', booking_id=new_booking_id))
+
+    except Exception as e:
+        import traceback
+        print(f"[RENT_NOW] ERROR: {e}")
+        print(f"[RENT_NOW] Full traceback:")
+        traceback.print_exc()
+        
+        flash(f"An error occurred during booking. Please try again or contact support.")
+        return redirect(url_for('products.home'))
+    finally:
+        print(f"[RENT_NOW] Closing database connection")
         cursor.close()
         connection.close()
-        return redirect(url_for('products.home'))
 
-    # 2. PROCEED TO BOOK (3NF: Insert into both tables) 🚀
-    cursor.execute("""
-        INSERT INTO bookings (customer_id, total_price, booking_date, rent_date, return_date, status, phone, address, location)
-        VALUES (:1, :2, SYSDATE, TO_DATE(:3, 'YYYY-MM-DD'), TO_DATE(:4, 'YYYY-MM-DD'), 'Confirmed', :5, :6, :7)
-        RETURN booking_id INTO :8
-    """, [session['customer_id'], total_rent, today_str, end_date_str, phone, address, location, cursor.var(int)])
+@user_bp.route('/booking-success/<int:booking_id>')
+def booking_success(booking_id):
+    if 'customer_id' not in session:
+        return redirect(url_for('auth.customer_login'))
     
-    new_booking_id = cursor.vars[0].getvalue()[0]
-
-    # Insert into booking_details
-    cursor.execute("""
-        INSERT INTO booking_details (booking_id, product_id, quantity, price)
-        VALUES (:1, :2, 1, :3)
-    """, (new_booking_id, product_id, total_rent))
+    connection = get_connection()
+    cursor = connection.cursor()
     
-    connection.commit()
+    # Fetch booking details with product info
+    cursor.execute("""
+        SELECT b.booking_id, p.name, b.total_price, b.booking_date, b.rent_date, b.return_date, b.status, p.image_path, b.address, b.location
+        FROM bookings b
+        JOIN booking_details bd ON b.booking_id = bd.booking_id
+        JOIN products p ON bd.product_id = p.product_id
+        WHERE b.booking_id = :1 AND b.customer_id = :2
+    """, (booking_id, session['customer_id']))
+    
+    booking = cursor.fetchone()
     cursor.close()
     connection.close()
     
-    flash(f"Rent Confirmed! {product_name} booked successfully. 🎉")
-    session['show_success_modal'] = True  # Trigger modal in my_bookings.html
-    return redirect(url_for('user.my_bookings'))
+    if not booking:
+        flash("Booking details not found.")
+        return redirect(url_for('user.my_bookings'))
+        
+    return render_template('booking_success.html', booking=booking)
 
 # ---------------- CART ---------------- #
 

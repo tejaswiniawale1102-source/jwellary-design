@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}Booking Successful! - RentEasyIndia{% endblock %}
+
+{% block content %}
+<div class="success-container"
+    style="max-width: 800px; margin: 60px auto; padding: 40px; text-align: center; background: white; border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.08); position: relative; overflow: hidden;">
+
+    <!-- CONFETTI ANIMATION (CSS only) -->
+    <div class="confetti-container">
+        {% for i in range(20) %}
+        <div class="confetti"
+            style="left: {{ range(0, 100)|random }}%; animation-delay: {{ range(0, 3000)|random }}ms; background-color: {{ ['#ff1f6a', '#8b2c4a', '#ffd700', '#26a541', '#3498db']|random }};">
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- SUCCESS ICON -->
+    <div class="success-icon-wrap" style="margin-bottom: 30px;">
+        <div
+            style="width: 100px; height: 100px; background: #26a541; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 3rem; box-shadow: 0 10px 20px rgba(38, 165, 65, 0.2); animation: scaleUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+            <i class="fa-solid fa-check"></i>
+        </div>
+    </div>
+
+    <h1 style="font-family: 'Playball', cursive; font-size: 3rem; color: #333; margin-bottom: 10px;">Booking Confirmed!
+    </h1>
+    <p style="color: #666; font-size: 1.2rem; margin-bottom: 40px;">Order #RE{{ booking[0] }} • <span
+            style="color: #26a541; font-weight: bold;">Payment Successful ✓</span></p>
+
+    <!-- ORDER SUMMARY CARD -->
+    <div class="summary-card"
+        style="text-align: left; background: #fdfdfd; border: 1px solid #eee; border-radius: 15px; overflow: hidden; margin-bottom: 40px;">
+        <div style="display: flex; gap: 20px; padding: 20px; border-bottom: 1px solid #eee;">
+            <img src="{{ booking[7] }}" alt="{{ booking[1] }}"
+                style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px;">
+            <div>
+                <h3 style="margin-bottom: 5px;">{{ booking[1] }}</h3>
+                <p style="color: #888; font-size: 0.9rem;">Rental Period: <strong>{{ booking[4].strftime('%d %b') }} -
+                        {{ booking[5].strftime('%d %b %Y') }}</strong></p>
+                <p style="color: #ff1f6a; font-weight: bold; font-size: 1.1rem; margin-top: 5px;">₹{{ booking[2] }}</p>
+            </div>
+        </div>
+        <div style="padding: 20px; background: #fffcfd;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h4 style="font-size: 0.8rem; text-transform: uppercase; color: #999; margin-bottom: 5px;">Delivery
+                        To</h4>
+                    <p style="font-weight: 500;">{{ session['customer_name'] }}</p>
+                    <p style="font-size: 0.9rem; color: #666;">{{ booking[8] if booking[8] else 'Default Address' }}</p>
+                </div>
+                <div>
+                    <h4 style="font-size: 0.8rem; text-transform: uppercase; color: #999; margin-bottom: 5px;">Payment
+                        Method</h4>
+                    <p style="font-weight: 500;">Mock UPI Transfer</p>
+                    <p style="font-size: 0.9rem; color: #26a541;">Status: Completed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEXT STEPS -->
+    <div style="text-align: left; margin-bottom: 40px; padding: 0 10px;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 15px;">What's Next?</h3>
+        <ul style="list-style: none; padding: 0;">
+            <li style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <span
+                    style="width: 24px; height: 24px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; min-width: 24px;">1</span>
+                <p style="color: #555; font-size: 0.95rem;">Our team will verify the availability and sanitize your
+                    item.</p>
+            </li>
+            <li style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <span
+                    style="width: 24px; height: 24px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; min-width: 24px;">2</span>
+                <p style="color: #555; font-size: 0.95rem;">You'll receive a WhatsApp confirmation with the delivery
+                    executive's details.</p>
+            </li>
+        </ul>
+    </div>
+
+    <!-- ACTIONS -->
+    <div style="display: flex; gap: 20px; justify-content: center;">
+        <a href="{{ url_for('user.my_bookings') }}" class="btn-primary"
+            style="padding: 15px 30px; background: #8b2c4a; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; transition: 0.3s; box-shadow: 0 5px 15px rgba(139, 44, 74, 0.2);">View
+            My Bookings</a>
+        <a href="{{ url_for('products.home') }}"
+            style="padding: 15px 30px; border: 1px solid #ddd; color: #666; text-decoration: none; border-radius: 10px; font-weight: 600; transition: 0.3s;">Back
+            to Home</a>
+    </div>
+</div>
+
+<style>
+    @keyframes scaleUp {
+        0% {
+            transform: scale(0.5);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .confetti-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+
+    .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        top: -10px;
+        opacity: 0.7;
+        animation: fall 3s infinite linear;
+    }
+
+    @keyframes fall {
+        to {
+            transform: translateY(600px) rotate(360deg);
+        }
+    }
+</style>
+{% endblock %}
