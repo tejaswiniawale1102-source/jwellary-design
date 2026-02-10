@@ -147,7 +147,7 @@ def dresses():
 
 @products_bp.route('/womens_collection')
 def womens_collection():
-    products = get_products_by_category('Dresses')
+    products = get_products_by_category('Womens')
     return render_template('womens.html', products=products)
 
 @products_bp.route('/mens')
@@ -157,7 +157,7 @@ def mens():
 
 @products_bp.route('/womens')
 def womens():
-    products = get_products_by_category('Dresses')
+    products = get_products_by_category('Womens')
     return render_template('womens.html', products=products)
 
 @products_bp.route('/decor')

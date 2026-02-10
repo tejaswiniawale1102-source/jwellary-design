@@ -148,10 +148,13 @@ def delete_item(product_id):
         # 2. Delete related cart items
         cursor.execute("DELETE FROM cart WHERE product_id = :1", (product_id,))
         
-        # 3. Delete related booking details
+        # 3. Delete related wishlist items
+        cursor.execute("DELETE FROM wishlist WHERE product_id = :1", (product_id,))
+        
+        # 4. Delete related booking details
         cursor.execute("DELETE FROM booking_details WHERE product_id = :1", (product_id,))
         
-        # 4. Delete the product itself
+        # 5. Delete the product itself
         cursor.execute("DELETE FROM products WHERE product_id = :1", (product_id,))
         
         connection.commit()
